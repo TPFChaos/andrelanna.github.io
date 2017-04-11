@@ -76,6 +76,149 @@ Além dessas características, drones possuem as seguintes funções básicas: a
 
 Dado esse cenário, pede-se aos alunos que representem (inicialmente) as características e comportamentos de um drone através de um diagrama de classes e, posteriormente, apresente a implementação dessa classe na linguagem Java. 
 
+-----------------------	|
+	Drone		|
+-----------------------	|
+-numHel: int		|
+- cam: String		|
+- velVM: int		|
+- velHM: int		|
+- autBat: int		|
+- distMax: int		|
+- bat:int		|
+-----------------------	|
++aceVelV ( ):int	|
++aceVelH( ):int		|
++desVelV ( ):int	|
++desVelH ( ):int	|
++gravCam ( ): String	|
++cheqVel( ): void	|
+-----------------------	|
+
+public class main {
+
+	public static void main(String[] args) {
+		
+
+		Drone drone1, drone2, drone3, drone4;
+		Controle controle1, controle2, controle3, controle4;
+		
+		drone1 = new Drone("Hubsan", "X4 mini", 4, "SD","Desligado", 10, 10, 7, 150,0,0,0);
+		controle1 = new Controle(drone1,0,0);
+		
+		drone2 = new Drone("Hubsan", "H501S X4 FPV",4, "HD","Desligado",12,12,20,1000,0,0,0);
+		controle2 = new Controle(drone2,0,0);
+		
+		drone3 = new Drone("DJI", "Mavic Pro",4, "UHD","Desligado",16,16,27,13000,0,0,0);
+		controle3 = new Controle(drone3,0,0);
+		
+		drone4 = new Drone("DJI", "Spreading Wings",4, "SUHD","Desligado",16,16,15,13000,0,0,0);
+		controle4 = new Controle(drone4,0,0);
+		
+	}
+
+}
+
+
+public class Drone 
+{
+	String marca;
+	String modelo;
+	int numHel;
+	String cam;
+	String camStatus;
+	int velVM;
+	int velHM;
+	int autBat;
+	int distMax;
+	int velV;
+	int velH;
+	int batA;
+	
+	public Drone (String m,
+			String mo,
+			int nH,
+			String c,
+			String cS,
+			int vV,
+			int vH,
+			int aB,
+			int dM,
+			int vVa,
+			int vHa,
+			int bat)
+	{
+		marca = m;
+		modelo = mo;
+		numHel = nH;
+		cam = c;
+		camStatus = cS;
+		velVM = vV;
+		velHM = vH;
+		autBat = aB;
+		distMax = dM;
+		velV = vVa; 
+		velH = vHa;
+		batA = bat;
+	}
+
+	public String gravCam()
+	{
+		if (camStatus=="Desligado")
+		{
+			camStatus = "Ligado";
+		}
+		else
+		{
+			camStatus="Desligado";
+		}
+		return camStatus;
+	}
+	
+	public int aceVelH(int x)
+	{
+		if ((velH+x) <= velHM)
+			velH = velH + x;
+		return velH;
+	}
+	
+	public int desVelH(int x)
+	{
+		if ((velH-x) >= 0)
+		{
+			velH = velH - x;
+		}
+		return velH;
+	}
+	
+	public int aceVelV(int x)
+	{
+		if ((velV+x) <= velVM)
+			velV = velV + x;
+		return velV;
+	}
+	
+	public int desVelV(int x)
+	{
+		if ((velV-x) >= 0)
+			velV = velV - x;
+		return velV;
+	}
+	
+	public void cheqVel()
+	{
+		if (batA<=5)
+		{
+			velVM = velVM/2;
+			velHM = velHM/2;
+		}
+		
+	}
+	
+	
+}
+
+
 
 **Questão 4:** Considerando a classe definida e implementada na questão 5, pede-se que os seguintes objetos sejam criados a partir do programa principal: 
 
@@ -94,6 +237,74 @@ Dado esse cenário, pede-se aos alunos que representem (inicialmente) as caracte
 **Questão 5:** Ainda levando em consideração o cenário descrito nas questões 3 e 4, é necessário fazer com que os comandos realizados pelo usuário no controle remoto sejam enviados ao drone. Para isso, é necessário que o controle remoto estabeleça uma conexão com o drone. A partir desse momento é possível enviar os seguintes comandos ao drone: a) aumentar ou diminuir a velocidade vertical em passos de 1 m/s; b) aumentar ou diminuir a velocidade horizontal em passos de 1m/s e, c) ativar ou desativar a câmera. É importante ressaltar que um controle remoto só pode estar conectado a um drone apenas. Por fim, controles remotos possuem baterias com autonomia entre 60 e 90 minutos e alcance entre 20 metros e 20 kilometros.  
 
 Desse modo, pede-se nessa questão que seja modelada e implementada em Java a classe que representa as características e o comportamento de um controle remoto, de modo que o drone possa ser comandado a partir do comandos enviados pelo controle remoto.
+
+------------------|
+Controle	  |
+------------------|
+- autBat: int     |
+- distMax: int    |
+- dronCon: String |
+------------------|
++aceVelV ( ):void |
++aceVelH( ):void  |
++desVelV ( ):void |
++desVelH ( ):void |
++camCon ( ):String|
+------------------|
+
+
+public class Controle 
+{
+	Drone dronCon;
+	int autBat;
+	int distMax;
+
+	
+	public Controle (Drone drC, int a , int d)
+	{
+		dronCon = drC;
+		autBat = a;
+		distMax = d;
+	}
+	
+	public void aceVelH()
+	{
+		dronCon.aceVelH(1);
+	}
+	
+	public void desVelH()
+	{
+		dronCon.desVelH(1);
+	}
+	
+	public void aceVelV()
+	{
+		dronCon.aceVelV(1);
+	}
+	
+	public void desVelV()
+	{
+		dronCon.desVelV(1);
+	}
+	
+	public String camCon ()
+	{
+		if (dronCon.camStatus=="Desligado")
+		{
+			dronCon.camStatus = "Ligado";
+		}
+		else
+		{
+			dronCon.camStatus="Desligado";
+		}
+		return dronCon.camStatus;
+	}
+
+}
+
+
+
+
 
 
 **Questão 6:** Sejam os seguintes códigos da *ClasseA* e da aplicação principal escritas em JAVA. 
@@ -149,17 +360,393 @@ System.out.println(q1.a4 == q3.a4);
 System.out.println(q3 == q2);
 {% endhighlight %}
 
+Resposta:
+
+a) Não, ambos possuem, tanto formato de declaração diferente quanto valor e local de alocação.
+
+b) para q1 => (0, 0.0f, null, false);
+	q2 => (0, 0.0f, null, false);
+	q3 => (1, 1.0f, "null", false);
+
+c)
+true
+true
+false
+true
+true
+false
+
+
+
+
+
 
 **Questão 7:**
+Questão 7: Seja o seguinte código em Java. Apresente o que será impresso ao final da execução do método main definido na classe Principal.
+
+package questao7;
+public class Principal {
+  public static void main(String[] args) {
+    Curso c1, c2;
+    Aluno a1, a2, a3;
+    c1 = new Curso(1, "Engenharia de Software", 240);
+    c2 = new Curso(2, "Engenharia Eletrônica", 257);
+    
+    a1 = new Aluno("Andre", c1, 13, 23, 02, 1983);
+    a2 = new Aluno("Maria", c2, 5, 27, 5, 1994);
+    a3 = new Aluno("Junior", c1, 70, 16, 11, 1995);
+    
+    System.out.println(a1.obterDetalhes());
+    System.out.println(a2.obterDetalhes());
+    System.out.println(a3.obterDetalhes());
+    a3 = a2;
+    System.out.println(a1 == a2);
+    System.out.println(a1 == a3);
+    System.out.println(a2 == a3);
+  }
+}
+
+package questao7;
+public class Aluno {
+  String nome; 
+  Curso curso;
+  int matricula;
+  int diaNascimento, 
+      mesNascimento, 
+      anoNascimento;
+  
+  public Aluno(String nom, Curso cur, int mat, int dNasc, int mNasc, int aNasc) {
+    nome = nom;
+    curso = cur;
+    matricula = mat;
+    diaNascimento = dNasc; 
+    mesNascimento = mNasc;
+    anoNascimento = aNasc;
+  }
+  
+  public String obterDetalhes() {
+    String resposta = "";
+    resposta += "Nome: " + nome + '\n';
+    resposta += "Curso: " + curso + '\n';
+    resposta += "Data de nascimento: " + diaNascimento + '/' + 
+                                     mesNascimento + '/' + 
+                                     anoNascimento;
+    return resposta; 
+  }
+  
+  protected void finalize() {
+    System.out.println("Esse objeto ALUNO vai ser destruido.");
+    System.out.println("Detalhes do objeto: " + '\n');
+    System.out.println(obterDetalhes());
+  }
+}
+
+package questao7;
+public class Curso {
+  int codigo;
+  String nomeCurso; 
+  int cargaHoraria;
+  
+  Curso (int cod, String nome, int ch) {
+    codigo = cod;
+    nomeCurso = nome; 
+    cargaHoraria = ch;
+  }
+  
+  public String obterDetalhes() {
+    String resposta = "";
+    resposta += "Nome do curso: " + nomeCurso + '\n';
+    resposta += "Codigo: " + codigo + '\n';
+    resposta += "Carga horaria: " + cargaHoraria;
+    return resposta; 
+  }
+  
+  protected void finalize() {
+    System.out.println("Esse objeto CURSO vai ser destruido.");
+    System.out.println("Detalhes do objeto: " + '\n');
+    System.out.println(obterDetalhes());
+  }
+}
+
+Saída: 
+Nome: Andre
+Curso: @endereçoc1
+Data de nascimento: 23/02/1983
+
+Nome:  Maria
+Curso: @endereçoc2
+Data de nascimento:  27/5/1994
+
+Nome: Junior
+Curso: @endreçoc1
+Data de nascimento: 16/11/1995
+
+false
+false
+true
 
 
 **Questão 8:**
+Considerando as classes Aluno e Curso definidas na questão 7, o que será impresso quando o garbagge collector de Java executar momentos antes do método main() da classe abaixo terminar sua execução?
+
+package questao8;
+public class Principal {
+  public static void main(String[] args) {
+    Curso c1, c2;
+    Aluno a1, a2, a3;
+    
+    c1 = new Curso(1, "Engenharia de Software", 240);
+    c2 = new Curso(2, "Engenharia Eletrônica", 257);
+    
+    a1 = new Aluno("Andre", c1, 13, 23, 02, 1983);
+    a2 = new Aluno("Maria", c2, 5, 27, 5, 1994);
+    a3 = new Aluno("Junior", c1, 70, 16, 11, 1995);
+    
+    a3 = a2; 
+    a2 = null;
+    c2 = c1; 
+    c1 = null;
+    c1 = a3.curso;
+    a3 = a1;
+    a1 = nul;
+    
+    //---> GARBAGGE COLLECTOR executa nesse instante
+  }
+}
 
 
-**Questão 9:**
 
 
-**Questão 10:**
+resposta:
+
+a1 e a2 perdem a referência a que apontavam, logo, o objeto criado com a declaração de a1 e a2 passam a não ter nada apontando para eles, assim, quando o coletor passar pela memoria, eles serão destruídos, reproduzindo a saída abaixo.
+
+Saída:
+Esse objeto ALUNO vai ser destruiído
+Detalhes do objeto
+
+Nome: Andre
+Curso: @endereçoc1
+Data de nascimento: 23/02/1983
+
+Saída: Esse objeto ALUNO vai ser destruiído
+Detalhes do objeto
+
+Nome:  Maria
+Curso: @endereçoc2
+Data de nascimento:  27/5/1994
+
+**Questão 9:**as cinco instruções listadas abaixo estão definidas no método main() da classe Principal e apresentam erros em suas sintaxes. Apresente quais são os erros, justifique-os e altere as instruções de modo a consertá-los. Considere os códigos das classes Aluno e Turma como sendo os códigos apresentados na questão 7.
+
+package questao9;
+public class Principal {
+	public static void main(String[] args) {
+		Curso c1, c2;
+		Aluno a1, a2, a3;
+		
+		c2 = new Curso(2, "Engenharia Eletrônica", 257);
+		
+		a1 = new Aluno("Andre", c1, 13, 23, 02, 1983);
+		a2 = new Aluno("Maria", c2, 5, 27, 5, 1994);
+		
+		Curso.obterDetalhes();
+		c2.matricula = 20; 
+		Curso.nome = "Ciência da computação";
+		c1.codigo = 21;
+		Aluno.obterDetalhes();
+		a3.cargaHoraria() = 220;
+	}
+}
+
+Resposta:
+
+Os erros estão contidos nas linhas marcadas como comentários do código abaixo:
+
+package questao9;
+public class Principal {
+        public static void main(String[] args) {
+                Curso c1, c2;
+                Aluno a1, a2, a3;
+                
+                c2 = new Curso(2, "Engenharia Eletrônica", 257);
+                
+                a1 = new Aluno("Andre", c1, 13, 23, 02, 1983);
+                a2 = new Aluno("Maria", c2, 5, 27, 5, 1994);
+                
+                Curso.obterDetalhes();	#Não é possível usar o método #obterDetalhes na Classe,só é possível em objetos.
+                c2.matricula = 20; #c2 não possúi o atributo matrícula
+                Curso.nome = "Ciência da computação"; #está declarando “nome” na #classe, o que é inválido
+                c1.codigo = 21; #o objeto c1 não foi criado
+                Aluno.obterDetalhes(); #novamente está havendo uma tentativa de uso  #de método em uma Classe
+                a3.cargaHoraria() = 220; #nao existe método cargaHoraria() e também #não há cargaHoraria na classe Aluno
+        }
+}
+
+
+**Questão 10:**sabe-se que um curso em é formado por um conjunto de disciplinas, para as quais são definidas as seguintes características:
+um código da disciplina;
+um nome;
+uma carga horária, e
+um departamento responsável por lecionar tal disciplina.
+Sabe-se ainda que para cada disciplina são criadas diversas turmas. Cada turma é descrita através das seguintes características:
+um código da turma;
+um número total de vagas;
+um número de vagas livres;
+um número de vagas ocupadas, e
+dias/horarios em que ela ocorre.
+Além disso, é necessário que os alunos se matriculem nessas turmas. Tal procedimento consiste em associar os alunos em uma turma específica (caso haja vagas) e aumentar o número de vagas ocupadas.
+Considerando o contexto formado pelas classes Aluno e Curso (vide implementação na questão 7) e a descrição acima, pede-se:
+a) em Java, crie uma classe que seja capaz de representar as características e o comportamento de uma turma.
+b) Crie as seguintes turmas:
+turma 1 de Orientação por objetos, com 46 vagas livres, que ocorre todas as 4as e 6as feiras, das 12:00 às 16:00 horas;
+turma 1 de Desenvolvimento Avançado de software, com 30 vagas livres, que ocorre todas as 4as. e 6as. feiras, das 16:00 às 18:00 horas.
+c) associe ambas turmas recem-criadas ao curso de Engenharia de Software,
+d) matricule Andre e Maria na turma de orientação por objetos, e Junior na turma de desenvolvimento avançado de software.
+
+
+
+Resposta:
+
+public class main {
+
+	public static void main(String[] args) {
+		Curso c1, c2;
+	    Aluno a1, a2, a3;
+	    Turma t1,t2;
+	    
+	    c1 = new Curso(1, "Engenharia de Software", 240);
+	    c2 = new Curso(2, "Engenharia Eletrônica", 257);
+	    
+	    t1 = new Turma(1,"Orientação por objetos",46,"4as e 6as feiras, das 12:00 às 16:00 horas",c1,195341);
+	    t2 = new Turma(1,"Desenvolvimento Avançado de software",30,"4as. e 6as. feiras, das 16:00 às 18:00 horas",c1,206601);
+	    
+	    a1 = new Aluno("Andre", c1, 13, 23, 02, 1983,null);
+	    a2 = new Aluno("Maria", c2, 5, 27, 5, 1994,null);
+	    a3 = new Aluno("Junior", c1, 70, 16, 11, 1995,null);
+	    a1.matriculaAluno(t1);
+	    a2.matriculaAluno(t1);
+	    a3.matriculaAluno(t2);
+	    
+	}
+
+}
+
+
+public class Curso {
+  int codigo;
+  String nomeCurso; 
+  int cargaHoraria;
+  String depCurso;
+  
+  Curso (int cod, String nome, int ch) {
+    codigo = cod;
+    nomeCurso = nome; 
+    cargaHoraria = ch;
+  }
+  
+  public String obterDetalhes() {
+    String resposta = "";
+    resposta += "Nome do curso: " + nomeCurso + '\n';
+    resposta += "Codigo: " + codigo + '\n';
+    resposta += "Carga horaria: " + cargaHoraria;
+    return resposta; 
+  }
+  
+  protected void finalize() {
+    System.out.println("Esse objeto CURSO vai ser destruido.");
+    System.out.println("Detalhes do objeto: " + '\n');
+    System.out.println(obterDetalhes());
+  }
+}
+
+
+
+
+
+
+
+
+
+
+public class Turma {
+	int turma;
+	String nomeT;
+	int vagasL;
+	String diaH;	  
+	Curso cursoA;
+	int codigo;
+	
+	public Turma (int tur,
+	String nome,
+	int vagL,
+	String dia,	  
+	Curso curso,
+	int cod)
+	{
+		turma =tur;
+		nomeT = nome;
+		vagasL=vagL;
+		diaH = dia;	  
+		cursoA = curso;
+		codigo = cod;
+	}
+	
+}
+public class Aluno {
+  String nome; 
+  Curso curso;
+  int matricula;
+  int diaNascimento, 
+      mesNascimento, 
+      anoNascimento;
+  Turma turma;
+  
+  public Aluno(String nom, Curso cur, int mat, int dNasc, int mNasc, int aNasc,Turma t) {
+    nome = nom;
+    curso = cur;
+    matricula = mat;
+    diaNascimento = dNasc; 
+    mesNascimento = mNasc;
+    anoNascimento = aNasc;
+    turma = t;
+  }
+  
+  public String obterDetalhes() {
+    String resposta = "";
+    resposta += "Nome: " + nome + '\n';
+    resposta += "Curso: " + curso + '\n';
+    resposta += "Data de nascimento: " + diaNascimento + '/' + 
+                                     mesNascimento + '/' + 
+                                     anoNascimento;
+    return resposta; 
+  }
+  
+  protected void finalize() {
+    System.out.println("Esse objeto ALUNO vai ser destruido.");
+    System.out.println("Detalhes do objeto: " + '\n');
+    System.out.println(obterDetalhes());
+  }
+  
+  public void matriculaAluno(Turma t) {
+	  if (t.vagasL > 0)
+	  {
+		turma = t;
+		System.out.println("O aluno "+nome+" foi matriculado em "+turma.nomeT+" Turma "+turma.turma+" código "+turma.codigo);
+		turma.vagasL = turma.vagasL -1;
+		System.out.println("Temos "+turma.vagasL+" vagas livres.");
+	  }
+	  else
+	  {
+		  System.out.println("O aluno "+nome+" não foi matriculado em "+t.nomeT+" Turma "+t.turma+" código "+t.codigo);
+		  System.out.println("Não há vagas livres.");
+	  }
+  }
+  
+  
+}
+
+
+
 
 
 ## Referências:
